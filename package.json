@@ -1,0 +1,22 @@
+{
+    "name": "bible-converter",
+    "description": "Convert Bible formats to a universal JSON Bible Format",
+    "version": "1.0.0",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "build": "tsc && node add-js-extension.js",
+        "test": "node dist/tests/test.js"
+    },
+    "author": "vassbo",
+    "license": "ISC",
+    "dependencies": {
+        "node-html-parser": "^6.1.13",
+        "sqlite3": "^5.1.7",
+        "xml2js": "^0.6.2"
+    },
+    "devDependencies": {
+        "typescript": "^5.6.2",
+        "@types/node": "^22.7.4"
+    }
+}
