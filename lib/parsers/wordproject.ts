@@ -1,3 +1,5 @@
+// https://www.wordproject.org/download/bibles/
+
 import NodeHTMLParser from "node-html-parser"
 import path from "path"
 import { Bible, Book, Chapter, Verse } from "../Bible"
@@ -13,7 +15,7 @@ export async function parseWordProject(filePath: string, outputFolderPath: strin
     const name = path.basename(filePath, extension)
 
     const json = parser(path.dirname(filePath), fileContent)
-    jsonToFile(outputFolderPath, name, json)
+    return [jsonToFile(outputFolderPath, name, json)]
 }
 
 export function parseWordProjectFolder(inputFolderPath: string, outputFolderPath: string) {
@@ -22,23 +24,21 @@ export function parseWordProjectFolder(inputFolderPath: string, outputFolderPath
 
     folders.forEach((folderName, bibleIndex) => {
         const folderPath = path.join(inputFolderPath, folderName, folderName)
-        const index = readFile(path.join(folderPath, "index.htm"))
+        const fileContent = readFile(path.join(folderPath, "index.htm"))
 
         const extension = path.extname(folderPath)
         const name = path.basename(folderPath, extension)
 
         console.log(`Parsing ${bibleIndex + 1}: "${name}"!`)
-        const json = parser(folderPath, index)
+        const json = parser(folderPath, fileContent)
         jsonToFile(outputFolderPath, name, json)
     })
 
     console.log("Finished:", folders.length)
 }
 
-function parser(folderPath: string, indexContent: string) {
-    const root = parse(indexContent)
-
-    let bibleName: string = root.querySelector("h1")?.textContent?.trim() + "_" + path.basename(folderPath).replace("_new", "")
+function parser(folderPath: string, content: string) {
+    const root = parse(content)
 
     const links = root.querySelectorAll("li")
     const bookList: any[] = []
@@ -63,7 +63,7 @@ function parser(folderPath: string, indexContent: string) {
         // let chapterFiles: string[] = getFilesInFolder(path.join(INPUT, folderName), [".htm"])
 
         let chapters: Chapter[] = []
-        chapterLinks.forEach((chapterFile) => {
+        chapterLinks.forEach((chapterFile, i) => {
             const chapterContent = readFile(path.join(folderPath, chapterFile))
             // const root = parse(index)
             // const verseElem = root.querySelector(".textBody")?.innerHTML!
@@ -77,7 +77,7 @@ function parser(folderPath: string, indexContent: string) {
                 if (verse.indexOf("</p>") > -1 && verse.indexOf("</p>") < textEnd) textEnd = verse.indexOf("</p>")
                 if (verse.indexOf("<br />") > -1 && verse.indexOf("<br />") < textEnd) textEnd = verse.indexOf("<br />")
 
-                let number = Number(verse.slice(verse.indexOf("id=") + 3, verse.indexOf(">")).replaceAll('"', "")) || i
+                let number = Number(verse.slice(verse.indexOf("id=") + 3, verse.indexOf(">")).replaceAll('"', "")) || i + 1
                 let text = verse.slice(textStart, textEnd).trim()
 
                 verses.push({ number, text })
@@ -85,12 +85,13 @@ function parser(folderPath: string, indexContent: string) {
 
             // const verses = root.querySelectorAll(".verse").map((a, i) => ({ number: Number(a.getAttribute("id")) || i + 1, value: a.textContent }))
 
-            let chapterIndex = chapterFile.slice(chapterFile.indexOf("/") + 1, chapterFile.indexOf("."))
+            let chapterIndex = Number(chapterFile.slice(chapterFile.indexOf("/") + 1, chapterFile.indexOf("."))) || i + 1
             chapters.push({ number: chapterIndex, verses })
         })
 
         books.push({ number: Number(folderName) || i + 1, name, chapters })
     }
 
+    let bibleName: string = root.querySelector("h1")?.textContent?.trim() + "_" + path.basename(folderPath).replace("_new", "")
     return { name: bibleName, metadata: {}, books } as Bible
 }

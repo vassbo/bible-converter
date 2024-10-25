@@ -1,12 +1,15 @@
+// https://github.com/Jesulayomy/OpenLP
+// https://github.com/rwev/bible
+
 import { Bible } from "../Bible"
 import { OpenSongBible } from "../types/OpenSong"
 import { parseBooks } from "../util/books"
 import { getSpecificFilesInFolder } from "../util/file"
-import { bibleParser, parseBibles } from "../util/helper"
+import { bibleContentParser, parseBibles } from "../util/helper"
 import { toArray, xml2json } from "../util/xml"
 
 export async function parseOpenSong(filePath: string, outputFolderPath: string, fileContent?: string) {
-    await bibleParser(filePath, outputFolderPath, fileContent, parser)
+    return [await bibleContentParser(filePath, outputFolderPath, fileContent, parser)]
 }
 
 export function parseOpenSongFolder(inputFolderPath: string, outputFolderPath: string) {

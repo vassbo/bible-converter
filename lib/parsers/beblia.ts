@@ -1,12 +1,14 @@
+// https://github.com/Beblia/Holy-Bible-XML-Format
+
 import { Bible } from "../Bible"
 import { BebliaBible } from "../types/Beblia"
 import { parseBooks } from "../util/books"
 import { getSpecificFilesInFolder } from "../util/file"
-import { bibleParser, getMetadata, parseBibles } from "../util/helper"
+import { bibleContentParser, getMetadata, parseBibles } from "../util/helper"
 import { toArray, xml2json } from "../util/xml"
 
 export async function parseBeblia(filePath: string, outputFolderPath: string, fileContent?: string) {
-    await bibleParser(filePath, outputFolderPath, fileContent, parser)
+    return [await bibleContentParser(filePath, outputFolderPath, fileContent, parser)]
 }
 
 export function parseBebliaFolder(inputFolderPath: string, outputFolderPath: string) {

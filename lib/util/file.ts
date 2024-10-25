@@ -8,6 +8,7 @@ export function jsonToFile(folderPath: string, name: string, json: any) {
     const p = path.join(folderPath, name)
 
     fs.writeFileSync(p, JSON.stringify(json))
+    return p
 }
 
 function formatToFileName(name: string = "") {

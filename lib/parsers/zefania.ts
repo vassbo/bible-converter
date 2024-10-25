@@ -1,12 +1,17 @@
+// https://sourceforge.net/projects/zefania-sharp/files/Bibles/
+// https://osdn.net/projects/sfnet_zefania-sharp/releases/
+// https://www.ph4.org/b4_mobi.php?q=zefania
+// https://www.ajaytheceo.com/digital/bibles
+
 import { Bible } from "../Bible"
 import { ZefaniaBible } from "../types/Zefania"
 import { parseBooks } from "../util/books"
 import { getSpecificFilesInFolder } from "../util/file"
-import { bibleParser, getMetadata, parseBibles } from "../util/helper"
+import { bibleContentParser, getMetadata, parseBibles } from "../util/helper"
 import { toArray, xml2json } from "../util/xml"
 
 export async function parseZefania(filePath: string, outputFolderPath: string, fileContent?: string) {
-    await bibleParser(filePath, outputFolderPath, fileContent, parser)
+    return [await bibleContentParser(filePath, outputFolderPath, fileContent, parser)]
 }
 
 export function parseZefaniaFolder(inputFolderPath: string, outputFolderPath: string) {

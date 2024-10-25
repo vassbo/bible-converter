@@ -24,14 +24,22 @@ export async function parseBibles(inputFiles: string[], outputPath: string, pars
     console.log("Finished:", bibles)
 }
 
-export async function bibleParser(filePath: string, outputFolderPath: string, fileContent: string | undefined, parser: ParserFunction) {
+export async function bibleParser(filePath: string, outputFolderPath: string, parser: ParserFunction) {
+    const extension = path.extname(filePath)
+    const name = path.basename(filePath, extension)
+
+    const json = await parser(filePath)
+    return jsonToFile(outputFolderPath, name, json)
+}
+
+export async function bibleContentParser(filePath: string, outputFolderPath: string, fileContent: string | undefined, parser: ParserFunction) {
     if (!fileContent) fileContent = readFile(filePath)
 
     const extension = path.extname(filePath)
     const name = path.basename(filePath, extension)
 
     const json = await parser(fileContent, name)
-    jsonToFile(outputFolderPath, name, json)
+    return jsonToFile(outputFolderPath, name, json)
 }
 
 export function getMetadata<T>(metadata: T, excludeTag?: string) {

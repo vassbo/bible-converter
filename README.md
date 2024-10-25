@@ -8,7 +8,18 @@ Currently supported file types:
 -   OSIS XML
 -   OpenSong XML
 -   Beblia XML
+-   SoftProjector SPB
 -   WordProject HTML
+-   BibleQuote HTML
+-   iBible HTML
+-   MyBible SQL
+-   eBible SQL
+-   jBible SQL
+
+This is a helpful utility, but make sure you have the proper permission to actually use the Bible file you are converting!
+If unsure take contact with the publisher/Bible society.
+
+If you have issues in regards to copyright, please take contact!
 
 See a list of available Bibles here: [biblelist.netlify.app](https://biblelist.netlify.app)
 

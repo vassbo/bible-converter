@@ -1,12 +1,14 @@
+// https://github.com/bzerangue/osis-bibles
+
 import { Bible } from "../Bible"
 import { OSISBible } from "../types/OSIS"
 import { getBookObject, parseBooks } from "../util/books"
 import { getSpecificFilesInFolder } from "../util/file"
-import { bibleParser, getMetadata, parseBibles } from "../util/helper"
+import { bibleContentParser, getMetadata, parseBibles } from "../util/helper"
 import { toArray, xml2json } from "../util/xml"
 
 export async function parseOSIS(filePath: string, outputFolderPath: string, fileContent?: string) {
-    await bibleParser(filePath, outputFolderPath, fileContent, parser)
+    return [await bibleContentParser(filePath, outputFolderPath, fileContent, parser)]
 }
 
 export function parseOSISFolder(inputFolderPath: string, outputFolderPath: string) {

@@ -1,4 +1,4 @@
-import { Book } from "../Bible"
+import { Book, Chapter, Verse } from "../Bible"
 import { toArray } from "./xml"
 
 type Keys = {
@@ -40,6 +40,34 @@ export function parseBooks(books: any[], keys: Keys): Book[] {
             return Number(number)
         }
     })
+}
+
+/////
+
+export function flatVersesToChapters(versesData: any[], { chapterNumber = "chapter", verseNumber = "verse", text = "text", title = "", note = "" }, extra: { titles?: any[]; notes?: any[] } = {}) {
+    let chapters: Chapter[] = []
+    let verses: Verse[] = []
+
+    let currentChapterNumber = 0
+    versesData.map((a) => {
+        if (a[chapterNumber] === undefined) return
+        if (a[chapterNumber] !== currentChapterNumber) {
+            if (verses.length) chapters.push({ number: currentChapterNumber, verses })
+            verses = []
+            currentChapterNumber = a[chapterNumber]
+        }
+
+        let titleValue: string = extra.titles?.find((b) => b[chapterNumber] === a[chapterNumber] && b[verseNumber] === a[verseNumber])?.[title] || ""
+        let footnoteValue: string = extra.notes?.find((b) => b[chapterNumber] === a[chapterNumber] && b[verseNumber] === a[verseNumber])?.[note] || ""
+
+        let textValue = (titleValue ? `# ${titleValue} #` : "") + a[text] + (footnoteValue ? `*{${footnoteValue}}*` : "")
+
+        verses.push({ number: a[verseNumber], text: textValue })
+    })
+
+    if (verses.length) chapters.push({ number: currentChapterNumber, verses })
+
+    return chapters
 }
 
 /////
