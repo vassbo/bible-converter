@@ -31,7 +31,7 @@ See a list of available Bibles here: [biblelist.netlify.app](https://biblelist.n
 3. Enter this commands
 ```bash
 npm install
-npm build
+npm run build
 ```
 
 ## Usage
