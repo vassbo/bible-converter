@@ -23,6 +23,17 @@ If you have issues in regards to copyright, please take contact!
 
 See a list of available Bibles here: [biblelist.netlify.app](https://biblelist.netlify.app)
 
+## Manual Installation
+1. Clone this repo
+`git clone https://github.com/vassbo/bible-converter.git`
+2. Go inside bible-converter directory
+`cd ./bible-converter/`
+3. Enter this commands
+```bash
+npm install
+npm build
+```
+
 ## Usage
 
 Convert a folder of Bibles (with auto detect)
@@ -47,3 +58,16 @@ const OUTPUT_FOLDER = "/converted/"
 await convertBible().auto(INPUT_FILE, OUTPUT_FOLDER)
 await convertBible().zefania(INPUT_FILE, OUTPUT_FOLDER)
 ```
+
+### Or just run the test (Recommended)
+Before running, make sure you have these folders **outside bible-converter's directory**:
+```text
+project-root/
+├─ bible-converter/
+├─ Bibles/	    #Place your input Bible files here
+└─ Converted/	#Converted JSON files will be written here
+```
+
+Then run:
+`npm test`
+This will convert all Bible files in ../Bibles/ to JSON in ../Converted/.
